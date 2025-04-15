@@ -11,7 +11,7 @@
 
 
 
-from sqlmodel import Field, SQLModel, Session, create_engine
+from sqlmodel import Field, SQLModel, Session, create_engine, select
 
 
 class Hero(SQLModel, table=True):
@@ -36,12 +36,45 @@ def create_heroes():
     hero_2 = Hero(name = "SpiderMan", secret_name = "Peter Parker")
     hero_3 = Hero(name = "IronMan", secret_name = "Tony", age = 33)
     
-    session = Session(engine)
-    session.add(hero_1)
-    session.add(hero_2)
-    session.add(hero_3)
+    print("Before: ")
+    print("Hero 1: ", hero_1)
+    print("Hero 2: ", hero_2)
+    print("Hero 3: ", hero_3)
     
-    session.commit()
+    with Session(engine) as session:
+        session.add(hero_1)
+        session.add(hero_2)
+        session.add(hero_3)
+        
+        print("After adding to the database:")
+        print("Hero 1:", hero_1)
+        print("Hero 2:", hero_2)
+        print("Hero 3:", hero_3)
+    
+        session.commit()
+        
+        print("After committing to the database: ")
+        print("Hero 1: ",hero_1)
+        print("Hero 2: ",hero_2.name)
+        print("Hero 3: ",hero_3.name)
+        
+        session.refresh(hero_1)
+        session.refresh(hero_2)
+        session.refresh(hero_3)
+        
+        print("After Refresh: ")
+        print("Hero 1: ", hero_1)
+        print("Hero 2: ", hero_2.name)
+        print("Hero 3: ", hero_3.name)
+        
+def select_heroes():
+    with Session(engine) as session:
+        statement = select(Hero)
+        results = session.exec(statement)
+        # for hero in results:
+        #     print(hero)
+        
+        heroes = session.exec(select(Hero)).all()
 
 def create_db_and_tables():
     SQLModel.metadata.create_all(engine)
