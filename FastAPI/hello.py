@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI 
 
 app = FastAPI()
 
@@ -13,3 +13,17 @@ def say_hello():
 @app.get("/Introduce")
 def say_introduce(name: str):
     return {"message": f"Hello I am {name}!"}
+
+@app.get("/users/{user_id}/items")
+def get_user_items(user_id:int):
+    pass
+
+@app.get("/user/{id}")
+def get_user(id: int, username: str, email: str):
+    return {
+        "id": id,
+        "username": username,
+        "email": email
+    }
+
+ 
