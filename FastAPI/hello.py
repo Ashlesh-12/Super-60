@@ -3,7 +3,7 @@ from fastapi import FastAPI
 app = FastAPI()
 
 @app.get("/") # here we can write anything but in web also we have to change the name.
-def root():
+async def root():
     return {"message": "Hello World"}
 
 @app.get("/hello")
@@ -18,8 +18,8 @@ def say_introduce(name: str):
 def get_user_items(user_id:int):
     pass
 
-@app.get("/user/{id}")
-def get_user(id: int, username: str, email: str):
+@app.post("/user/{id}")
+def Post(id: int, username: str, email: str):
     return {
         "id": id,
         "username": username,
