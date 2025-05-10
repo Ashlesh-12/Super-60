@@ -1,4 +1,5 @@
 from fastapi import FastAPI 
+from Models import Book, BookResponse
 
 app = FastAPI()
 
@@ -26,4 +27,16 @@ def Post(id: int, username: str, email: str):
         "email": email
     }
 
- 
+@app.post("/book")
+async def create_book(book: Book):
+    return {
+        "Message": "Book Created",
+        "book": book
+    }
+
+@app.get("/allbooks", response_model=list[BookResponse])
+async def read_all_books():
+    return [
+        {"id":1,"title": "Book1", "author": "Author1"},
+        {"id":2,"title": "Book2", "author": "Author2"}
+    ]
